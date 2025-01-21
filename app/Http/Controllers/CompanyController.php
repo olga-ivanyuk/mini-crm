@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Company;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class CompanyController extends Controller
@@ -30,6 +31,11 @@ class CompanyController extends Controller
             'website' => 'nullable|url|max:255',
         ]);
 
+        if ($request->hasFile('logo')) {
+            $path = $request->file('logo')->store('logos', 'public');
+            $validated['logo'] = $path;
+        }
+
         Company::query()->create($validated);
 
         return redirect()->route('companies.index')->with('success', 'Company created successfully.');
@@ -54,13 +60,26 @@ class CompanyController extends Controller
             'website' => 'nullable|url',
         ]);
 
+        if ($request->hasFile('logo')) {
+            if ($company->logo) {
+                Storage::disk('public')->delete($company->logo);
+            }
+
+            $path = $request->file('logo')->store('logos', 'public');
+            $validated['logo'] = $path;
+        }
+
         $company->update($validated);
 
         return redirect()->route('companies.index')->with('success', 'Company updated successfully.');
     }
 
-    public function destroy(Company $company): RedirectResponse
+    public function destroy($company): RedirectResponse
     {
+        if ($company->logo) {
+            Storage::disk('public')->delete($company->logo);
+        }
+
         $company->delete();
 
         return redirect()->route('companies.index')->with('success', 'Company deleted successfully.');
