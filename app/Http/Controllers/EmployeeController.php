@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Employee\StoreRequest;
 use App\Http\Requests\Employee\UpdateRequest;
+use App\Models\Company;
 use App\Models\Employee;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -20,7 +21,9 @@ class EmployeeController extends Controller
 
     public function create(): View
     {
-        return view('employees.create');
+        $companies = Company::all();
+
+        return view('employees.create', compact('companies'));
     }
 
     public function store(StoreRequest $request): RedirectResponse
@@ -28,7 +31,7 @@ class EmployeeController extends Controller
         $validated = $request->validated();
         Employee::query()->create($validated);
 
-        return redirect()->route('employees.index')->with('success', 'Employee created successfully.');
+        return redirect()->route('admin.employees.index')->with('success', 'Employee created successfully.');
     }
 
     public function show(string $id)
@@ -38,21 +41,22 @@ class EmployeeController extends Controller
 
     public function edit(Employee $employee): View
     {
-        return view('employees.edit', compact('employee'));
+        $companies = Company::all();
+        return view('employees.edit', compact('employee', 'companies'));
     }
 
-    public function update(UpdateRequest $request, $employee): RedirectResponse
+    public function update(UpdateRequest $request, Employee $employee): RedirectResponse
     {
         $validated = $request->validated();
         $employee->update($validated);
 
-        return redirect()->route('employees.index')->with('success', 'Employee updated successfully.');
+        return redirect()->route('admin.employees.index')->with('success', 'Employee updated successfully.');
     }
 
     public function destroy(Employee $employee): RedirectResponse
     {
         $employee->delete();
 
-        return redirect()->route('employees.index')->with('success', 'Company deleted successfully.');
+        return redirect()->route('admin.employees.index')->with('success', 'Company deleted successfully.');
     }
 }
