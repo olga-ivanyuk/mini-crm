@@ -36,7 +36,7 @@ class CompanyController extends Controller
         $validated['logo'] = $this->companyService->handleLogoUpload($request->file('logo'));
         Company::query()->create($validated);
 
-        return redirect()->route('companies.index')->with('success', 'Company created successfully.');
+        return redirect()->route('admin.companies.index')->with('success', 'Company created successfully.');
     }
 
     public function show(string $id)
@@ -49,19 +49,19 @@ class CompanyController extends Controller
         return view('companies.edit', compact('company'));
     }
 
-    public function update(UpdateRequest $request, $company): RedirectResponse
+    public function update(UpdateRequest $request, Company $company): RedirectResponse
     {
         $validated = $request->validated();
-        $validated['logo'] = $this->companyService->handleLogoUpload($request->file('logo'), $company->logo);
+        $validated['logo'] = $request->file('logo') ? $this->companyService->handleLogoUpload($request->file('logo'), $company->logo) : '';
         $company->update($validated);
 
-        return redirect()->route('companies.index')->with('success', 'Company updated successfully.');
+        return redirect()->route('admin.companies.index')->with('success', 'Company updated successfully.');
     }
 
     public function destroy(Company $company): RedirectResponse
     {
         $company->delete();
 
-        return redirect()->route('companies.index')->with('success', 'Company deleted successfully.');
+        return redirect()->route('admin.companies.index')->with('success', 'Company deleted successfully.');
     }
 }
