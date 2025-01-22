@@ -68,10 +68,6 @@ class CompanyController extends Controller
 
     public function destroy($company): RedirectResponse
     {
-        if ($company->logo) {
-            Storage::disk('public')->delete($company->logo);
-        }
-
         $company->delete();
 
         return redirect()->route('companies.index')->with('success', 'Company deleted successfully.');
