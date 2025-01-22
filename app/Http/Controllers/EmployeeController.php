@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Employee\StoreRequest;
+use App\Http\Requests\Employee\UpdateRequest;
 use App\Models\Employee;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -21,16 +23,9 @@ class EmployeeController extends Controller
         return view('employees.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'company_id' => 'required|exists:companies,id',
-            'email' => 'nullable|email|max:255',
-            'phone' => 'nullable|string|max:20',
-        ]);
-
+        $validated = $request->validated();
         Employee::query()->create($validated);
 
         return redirect()->route('employees.index')->with('success', 'Employee created successfully.');
@@ -46,15 +41,9 @@ class EmployeeController extends Controller
         return view('employees.edit', compact('employee'));
     }
 
-    public function update(Request $request, $employee): RedirectResponse
+    public function update(UpdateRequest $request, $employee): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'nullable|email',
-            'logo' => 'nullable|image|max:2048',
-            'website' => 'nullable|url',
-        ]);
-
+        $validated = $request->validated();
         $employee->update($validated);
 
         return redirect()->route('employees.index')->with('success', 'Employee updated successfully.');
