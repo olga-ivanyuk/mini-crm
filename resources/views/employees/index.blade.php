@@ -42,7 +42,7 @@
             </table>
         </div>
     </div>
-
+    {{ $employees->links() }}
     <script>
         $(document).ready(function() {
             $('#employeesTable').DataTable({

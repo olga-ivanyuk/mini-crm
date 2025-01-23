@@ -45,6 +45,7 @@
             </table>
         </div>
     </div>
+    {{ $companies->links() }}
     <script>
         $(document).ready(function() {
             $('#companiesTable').DataTable({
