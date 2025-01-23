@@ -33,6 +33,7 @@
                         </td>
                         <td>
                             <a href="{{ route('admin.companies.edit', $company) }}" class="btn btn-sm btn-primary">Edit</a>
+                            <a href="{{ route('admin.companies.show', $company) }}" class="btn btn-sm btn-info">View</a>
                             <form action="{{ route('admin.companies.destroy', $company) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')

@@ -63,9 +63,9 @@ class CompanyController extends Controller
         }
     }
 
-    public function show(string $id)
+    public function show(Company $company): View
     {
-        //
+        return view('companies.show', compact('company'));
     }
 
     public function edit(Company $company): View
