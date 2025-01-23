@@ -27,9 +27,10 @@
                         <td>{{ $employee->last_name }}</td>
                         <td>{{ $employee->email }}</td>
                         <td>{{ $employee->phone }}</td>
-                        <td>{{ $employee->company->name }}</td> <!-- Assuming employee has a relationship with company -->
+                        <td>{{ $employee->company->name }}</td>
                         <td>
                             <a href="{{ route('admin.employees.edit', $employee) }}" class="btn btn-sm btn-primary">Edit</a>
+                            <a href="{{ route('admin.employees.show', $employee) }}" class="btn btn-sm btn-info">View</a>
                             <form action="{{ route('admin.employees.destroy', $employee) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')

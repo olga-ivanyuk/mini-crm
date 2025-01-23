@@ -36,9 +36,9 @@ class EmployeeController extends Controller
         return redirect()->route('admin.employees.index')->with('success', 'Employee created successfully.');
     }
 
-    public function show(string $id)
+    public function show(Employee $employee): View
     {
-        //
+        return view('employees.show', compact('employee'));
     }
 
     public function edit(Employee $employee): View
